@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Megane's Meal Prep App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: white;
+            padding: 15px 30px;
+
+        }
+
+        .navbar .nav-link {
+            color: black;
+        }
+
+        .hero {
+            background: url('./img/foodbg1.avif') center/cover no-repeat;
+            height: 70vh;
+            margin: 30px;
+            margin-top: 50px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content span {
+            color: rgb(255, 94, 0);
+            font-weight: small;
+            font-size: 1.5rem;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-top: 10px;
+        }
+
+        .meal-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        .meal-container {
+            position: relative;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .meal-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .meal-card {
+            width: 250px;
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .meal-card img {
+            width: 100%;
+            height: 200px;
+            border-radius: 10px;
+        }
+
+        .meal-card h4,
+        .meal-card p {
+            margin: 5px 0;
+        }
+
+        #emptyMessage {
+            font-weight: bold;
+            font-size: xx-large;
+            color: rgb(255, 94, 0);
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white">
+        <div class="container-fluid">
+            <div class="row w-100">
+                <!-- Empty Column (1) -->
+                <div class="col-1"></div>
+
+                <!-- Logo (2) -->
+                <div class="col-1 d-flex align-items-center">
+                    <a class="navbar-brand" href="#">LOGO</a>
+                </div>
+
+                <!-- Empty Column (3) -->
+                <div class="col-1"></div>
+
+                <!-- Largest Section (4-7) -->
+                <div class="col-4 d-flex justify-content-center">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown">
+                                All Categories
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Option 1</a></li>
+                                <li><a class="dropdown-item" href="#">Option 2</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <form class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Search for recipe">
+                                <button class="btn btn-success" type="submit">🔍</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Navbar Links (8-10) -->
+                <div class="col-3 d-flex justify-content-around align-items-center">
+                    <a class="nav-link text-dark" href="#">Home</a>
+                    <a class="nav-link text-dark" href="#">Explore</a>
+                    <a class="nav-link text-dark" href="#">Help</a>
+                </div>
+
+                <!-- Profile Picture (11) -->
+                <div class="col-1 d-flex align-items-center justify-content-center">
+                    <img src="https://via.placeholder.com/40" class="rounded-circle" alt="Profile">
+                </div>
+
+                <!-- Empty Column (12) -->
+                <div class="col-1"></div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span>Trending now</span>
+            <h1>Megane's Meal Prep App</h1>
+        </div>
+    </section>
+
+    <!-- Meal Form Section -->
+    <div class="container">
+        <form class="meal-form" onsubmit="addMeal(event)">
+            <input type="text" id="mealName" class="form-control" placeholder="Meal Name" required>
+            <input type="text" id="prepTime" class="form-control" placeholder="Preparation Time" required>
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+    </div>
+
+    <!-- Meal Display Section -->
+    <div class="container meal-container">
+        <h3>Meal List</h3>
+        <p id="emptyMessage">No meals added</p>
+        <div class="meal-grid" id="mealList"></div>
+    </div>
+
+
+    <!-- JavaScript Logic -->
+    <script>
+
+        let meals = [];
+
+        const mealImages = [
+            './img/pasta.jpg',
+            './img/fried-rice.jpg',
+            './img/pasta-bg.jpg'
+        ];
+
+        function addMeal(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            const mealName = document.getElementById("mealName").value.trim();
+            const prepTime = document.getElementById("prepTime").value.trim();
+            const mealImage = mealImages[Math.floor(Math.random() * mealImages.length)];
+
+            if (mealName && prepTime) {
+                // Add meal object to the array
+                meals.push({ name: mealName, time: prepTime, image: mealImage });
+
+                // Update the meal list
+                displayMeals();
+
+                // Clear input fields
+                document.getElementById("mealName").value = "";
+                document.getElementById("prepTime").value = "";
+            }
+        }
+
+
+        function displayMeals() {
+            const mealList = document.getElementById("mealList");
+            mealList.innerHTML = ""; // Clear previous content
+
+            if (meals.length === 0) {
+                document.getElementById("emptyMessage").style.display = "block";
+            } else {
+                document.getElementById("emptyMessage").style.display = "none";
+            }
+
+            meals.forEach(meal => {
+                const mealCard = document.createElement("div");
+                mealCard.classList.add("meal-card");
+
+                mealCard.innerHTML = `
+            <img src="${meal.image}" alt="Meal Image">
+            <h4>${meal.name}</h4>
+            <p>Cooking Time: ${meal.time}</p> `
+                    ;
+
+                mealList.appendChild(mealCard);
+            });
+        }
+
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
